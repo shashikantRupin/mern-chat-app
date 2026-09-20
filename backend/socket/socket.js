@@ -5,11 +5,33 @@ import express from "express";
 const app = express();
 
 const server = http.createServer(app);
-//set cors here to update  server access
+const allowedSocketOrigins = [
+	"http://localhost:3000",
+	"http://localhost:5173",
+	"http://127.0.0.1:3000",
+	"http://127.0.0.1:5173",
+];
+
+if (process.env.FRONTEND_URL) {
+	process.env.FRONTEND_URL.split(",").forEach((url) => {
+		const trimmed = url.trim();
+		if (trimmed && !allowedSocketOrigins.includes(trimmed)) {
+			allowedSocketOrigins.push(trimmed);
+		}
+	});
+}
+
 const io = new Server(server, {
 	cors: {
-		origin: ["http://localhost:3000"],
+		origin: (origin, callback) => {
+			if (!origin) return callback(null, true);
+			if (allowedSocketOrigins.includes(origin) || origin.endsWith(".pages.dev")) {
+				return callback(null, true);
+			}
+			return callback(null, true);
+		},
 		methods: ["GET", "POST"],
+		credentials: true,
 	},
 });
 
