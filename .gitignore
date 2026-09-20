@@ -23,6 +23,7 @@ dist-ssr
 !.env.example
 backend/.env
 frontend/.env
+DEPLOYMENT.md
 
 # Editor directories and files
 .vscode/*

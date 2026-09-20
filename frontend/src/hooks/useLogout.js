@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAuthContext } from "../context/AuthContext";
 import toast from "react-hot-toast";
-import { BACKEND_URL } from "../utils/constants";
+import { BACKEND_URL, getAuthHeaders } from "../utils/constants";
 
 const useLogout = () => {
 	const [loading, setLoading] = useState(false);
@@ -12,7 +12,7 @@ const useLogout = () => {
 		try {
 			const res = await fetch(`${BACKEND_URL}/api/auth/logout`, {
 				method: "POST",
-				headers: { "Content-Type": "application/json" },
+				headers: getAuthHeaders({ "Content-Type": "application/json" }),
 				credentials: "include",
 			});
 			const data = await res.json();

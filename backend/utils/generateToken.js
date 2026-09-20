@@ -13,6 +13,8 @@ const generateTokenAndSetCookie = (userId, res) => {
 		sameSite: isProduction ? "none" : "lax", // "none" is required for cross-origin requests in production
 		secure: isProduction, // secure must be true when sameSite is "none"
 	});
+
+	return token;
 };
 
 export default generateTokenAndSetCookie;
