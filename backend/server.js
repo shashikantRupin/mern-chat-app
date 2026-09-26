@@ -58,7 +58,8 @@ app.use(
 	})
 );
 
-app.use(express.json()); // parse incoming requests with JSON payloads
+app.use(express.json({ limit: "10mb" })); // parse incoming requests with JSON payloads (supports base64 avatar uploads)
+app.use(express.urlencoded({ limit: "10mb", extended: true }));
 app.use(cookieParser());
 
 // API Routes

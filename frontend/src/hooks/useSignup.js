@@ -7,8 +7,8 @@ const useSignup = () => {
 	const [loading, setLoading] = useState(false);
 	const { setAuthUser } = useAuthContext();
 
-	const signup = async ({ fullName, username, password, confirmPassword, gender }) => {
-		const success = handleInputErrors({ fullName, username, password, confirmPassword, gender });
+	const signup = async ({ fullName, email, password, confirmPassword, gender }) => {
+		const success = handleInputErrors({ fullName, email, password, confirmPassword, gender });
 		if (!success) return;
 
 		setLoading(true);
@@ -17,7 +17,7 @@ const useSignup = () => {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				credentials: "include",
-				body: JSON.stringify({ fullName, username, password, confirmPassword, gender }),
+				body: JSON.stringify({ fullName, email, password, confirmPassword, gender }),
 			});
 
 			const data = await res.json();
@@ -26,6 +26,7 @@ const useSignup = () => {
 			}
 			localStorage.setItem("chat-user", JSON.stringify(data));
 			setAuthUser(data);
+			toast.success("Account created successfully!");
 		} catch (error) {
 			toast.error(error.message);
 		} finally {
@@ -37,9 +38,15 @@ const useSignup = () => {
 };
 export default useSignup;
 
-function handleInputErrors({ fullName, username, password, confirmPassword, gender }) {
-	if (!fullName || !username || !password || !confirmPassword || !gender) {
+function handleInputErrors({ fullName, email, password, confirmPassword, gender }) {
+	if (!fullName || !email || !password || !confirmPassword || !gender) {
 		toast.error("Please fill in all fields");
+		return false;
+	}
+
+	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+	if (!emailRegex.test(email.trim())) {
+		toast.error("Please enter a valid email address");
 		return false;
 	}
 

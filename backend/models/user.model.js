@@ -5,11 +5,19 @@ const userSchema = new mongoose.Schema(
 		fullName: {
 			type: String,
 			required: true,
+			trim: true,
+		},
+		email: {
+			type: String,
+			lowercase: true,
+			trim: true,
+			default: function () {
+				return this.username || undefined;
+			},
 		},
 		username: {
 			type: String,
-			required: true,
-			unique: true,
+			required: false,
 		},
 		password: {
 			type: String,
@@ -25,7 +33,18 @@ const userSchema = new mongoose.Schema(
 			type: String,
 			default: "",
 		},
-		// createdAt, updatedAt => Member since <createdAt>
+		bio: {
+			type: String,
+			default: "🚀 Available to chat",
+		},
+		resetOtp: {
+			type: String,
+			default: null,
+		},
+		resetOtpExpiresAt: {
+			type: Date,
+			default: null,
+		},
 	},
 	{ timestamps: true }
 );
@@ -33,3 +52,4 @@ const userSchema = new mongoose.Schema(
 const User = mongoose.model("User", userSchema);
 
 export default User;
+

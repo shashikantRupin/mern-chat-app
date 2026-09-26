@@ -7,8 +7,8 @@ const useLogin = () => {
 	const [loading, setLoading] = useState(false);
 	const { setAuthUser } = useAuthContext();
 
-	const login = async (username, password) => {
-		const success = handleInputErrors(username, password);
+	const login = async (email, password) => {
+		const success = handleInputErrors(email, password);
 		if (!success) return;
 		setLoading(true);
 		try {
@@ -16,7 +16,7 @@ const useLogin = () => {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				credentials: "include",
-				body: JSON.stringify({ username, password }),
+				body: JSON.stringify({ email: email.trim(), password }),
 			});
 
 			const data = await res.json();
@@ -37,8 +37,8 @@ const useLogin = () => {
 };
 export default useLogin;
 
-function handleInputErrors(username, password) {
-	if (!username || !password) {
+function handleInputErrors(email, password) {
+	if (!email || !password) {
 		toast.error("Please fill in all fields");
 		return false;
 	}
