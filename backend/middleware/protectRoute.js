@@ -6,17 +6,21 @@ const protectRoute = async (req, res, next) => {
 	try {
 		let token = req.cookies?.jwt;
 
-		if (!token && req.headers.authorization && req.headers.authorization.startsWith("Bearer ")) {
-			token = req.headers.authorization.split(" ")[1];
-		} else if (!token && req.headers.Authorization && req.headers.Authorization.startsWith("Bearer ")) {
-			token = req.headers.Authorization.split(" ")[1];
+		const authHeader = req.headers.authorization || req.headers.Authorization;
+		if (!token && authHeader && authHeader.startsWith("Bearer ")) {
+			token = authHeader.split(" ")[1];
 		}
 
 		if (!token) {
 			return res.status(401).json({ error: "Unauthorized - No Token Provided" });
 		}
 
-		const decoded = jwt.verify(token, process.env.JWT_SECRET);
+		let decoded;
+		try {
+			decoded = jwt.verify(token, process.env.JWT_SECRET);
+		} catch (jwtError) {
+			return res.status(401).json({ error: "Unauthorized - Invalid or Expired Token" });
+		}
 
 		if (!decoded) {
 			return res.status(401).json({ error: "Unauthorized - Invalid Token" });

@@ -5,7 +5,10 @@ const generateTokenAndSetCookie = (userId, res) => {
 		expiresIn: "15d",
 	});
 
-	const isProduction = process.env.NODE_ENV === "production";
+	const isProduction =
+		process.env.NODE_ENV === "production" ||
+		process.env.RENDER === "true" ||
+		(process.env.NODE_ENV !== "development" && process.env.NODE_ENV !== "test");
 
 	res.cookie("jwt", token, {
 		maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days in MS
@@ -18,3 +21,4 @@ const generateTokenAndSetCookie = (userId, res) => {
 };
 
 export default generateTokenAndSetCookie;
+

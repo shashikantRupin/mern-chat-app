@@ -2,10 +2,12 @@ import { useState } from "react";
 import useConversation from "../zustand/useConversation";
 import toast from "react-hot-toast";
 import { BACKEND_URL, getAuthHeaders } from "../utils/constants";
+import { useAuthContext } from "../context/AuthContext";
 
 const useSendMessage = () => {
 	const [loading, setLoading] = useState(false);
 	const { messages, setMessages, selectedConversation } = useConversation();
+	const { setAuthUser } = useAuthContext();
 
 	const sendMessage = async (message) => {
 		setLoading(true);
@@ -19,6 +21,11 @@ const useSendMessage = () => {
 				body: JSON.stringify({ message }),
 			});
 			const data = await res.json();
+			if (res.status === 401 || (data.error && data.error.includes("Unauthorized"))) {
+				localStorage.removeItem("chat-user");
+				setAuthUser(null);
+				throw new Error(data.error || "Session expired. Please log in again.");
+			}
 			if (data.error) throw new Error(data.error);
 
 			setMessages([...messages, data]);
