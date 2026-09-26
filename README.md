@@ -2,7 +2,9 @@
 
 A decoupled, high-performance real-time chat application built with **React, Express, Socket.io, and MongoDB**. Designed for deployment with **Backend on Render** and **Frontend on Cloudflare Pages**.
 
-![Demo App](./images/chatapp.png)
+![Demo App](./images/chatapp1.png)
+
+![Demo App](./images/chatapp2.png)
 
 ## 🌟 Features
 - ⚡ **Decoupled Architecture**: Independent frontend and backend deployments.
