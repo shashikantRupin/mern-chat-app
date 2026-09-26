@@ -6,6 +6,8 @@ import SignUp from "./pages/signup/SignUp";
 import ForgotPassword from "./pages/forgot-password/ForgotPassword";
 import { Toaster } from "react-hot-toast";
 import { useAuthContext } from "./context/AuthContext";
+import IncomingCallModal from "./components/call/IncomingCallModal";
+import ActiveCallModal from "./components/call/ActiveCallModal";
 
 function App() {
 	const { authUser } = useAuthContext();
@@ -17,6 +19,15 @@ function App() {
 				<Route path='/signup' element={authUser ? <Navigate to='/' /> : <SignUp />} />
 				<Route path='/forgot-password' element={authUser ? <Navigate to='/' /> : <ForgotPassword />} />
 			</Routes>
+
+			{/* Global WebRTC Audio & Video Calling Overlays */}
+			{authUser && (
+				<>
+					<IncomingCallModal />
+					<ActiveCallModal />
+				</>
+			)}
+
 			<Toaster
 				position='top-center'
 				toastOptions={{

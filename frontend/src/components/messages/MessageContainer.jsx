@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import useConversation from "../../zustand/useConversation";
 import MessageInput from "./MessageInput";
 import Messages from "./Messages";
+import { useCallContext } from "../../context/CallContext";
 import { useAuthContext } from "../../context/AuthContext";
 import { useSocketContext } from "../../context/SocketContext";
 import { useThemeContext } from "../../context/ThemeContext";
@@ -23,6 +24,7 @@ const MessageContainer = () => {
 	const { selectedConversation, setSelectedConversation } = useConversation();
 	const { onlineUsers } = useSocketContext();
 	const { isDark } = useThemeContext();
+	const { startCall } = useCallContext();
 
 	const isOnline = selectedConversation && onlineUsers.includes(selectedConversation._id);
 
@@ -101,20 +103,22 @@ const MessageContainer = () => {
 						<div className='flex items-center gap-1 sm:gap-1.5 text-slate-400'>
 							<button
 								type='button'
-								onClick={() => toast("Voice calls coming soon!", { icon: "📞" })}
-								className={`p-2 rounded-xl transition-colors
+								onClick={() => startCall(selectedConversation, "audio")}
+								className={`p-2 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95
 									${isDark ? "hover:bg-slate-800 hover:text-indigo-400" : "hover:bg-slate-100 hover:text-indigo-600"}`}
 								title='Voice Call'
+								aria-label='Start voice call'
 							>
 								<FiPhone className='w-4 h-4' />
 							</button>
 
 							<button
 								type='button'
-								onClick={() => toast("Video calls coming soon!", { icon: "📹" })}
-								className={`p-2 rounded-xl transition-colors
+								onClick={() => startCall(selectedConversation, "video")}
+								className={`p-2 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95
 									${isDark ? "hover:bg-slate-800 hover:text-indigo-400" : "hover:bg-slate-100 hover:text-indigo-600"}`}
 								title='Video Call'
+								aria-label='Start video call'
 							>
 								<FiVideo className='w-4 h-4' />
 							</button>
@@ -125,6 +129,7 @@ const MessageContainer = () => {
 								className={`p-2 rounded-xl transition-colors
 									${isDark ? "hover:bg-slate-800 hover:text-indigo-400" : "hover:bg-slate-100 hover:text-indigo-600"}`}
 								title='Chat Details'
+								aria-label='View chat details'
 							>
 								<FiMoreVertical className='w-4 h-4' />
 							</button>
